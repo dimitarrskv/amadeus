@@ -7,12 +7,12 @@ The records are segmented in 2 categories - valid/invalid, which are displayed o
 
 
 ## Developer's Notes
-Angular@9.1.11,
-Component framework NgZorro (https://ng.ant.design/docs/introduce/en)
-NGXS as a state management library (https://www.ngxs.io/) since it has minimal boilerplate
-Tailwind as a class-based styling framework (https://tailwindcss.com/) to minimize the css blueprint
-PWA good practices are followed
-Followed this document (https://www.rabobank.com/en/images/dotCom-Rationale.pdf) to override some parts
+ * Angular@9.1.11,
+ * Component framework NgZorro (https://ng.ant.design/docs/introduce/en)
+ * NGXS as a state management library (https://www.ngxs.io/) since it has minimal boilerplate
+ * Tailwind as a class-based styling framework (https://tailwindcss.com/) to minimize the css blueprint
+ * PWA good practices are followed
+ * Followed this document (https://www.rabobank.com/en/images/dotCom-Rationale.pdf) to override some parts
 of the default theme according to the design guide of Rabobank
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.8.
