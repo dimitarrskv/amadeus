@@ -1,0 +1,61 @@
+<div class="wrapper xl:px-48 lg:px-42">
+    <h1 class="font-light">Customer Statement</h1>
+    <div class="mb-3" nz-row [nzGutter]="8" [formGroup]="form" nz-form nzLayout="inline">
+        <div class="mb-1" nz-col [nzMd]="12" [nzSm]="24">
+            <nz-tabset class="bg-white shadow-md rounded-sm" (nzSelectChange)="toggleTab($event)" [nzSelectedIndex]="(tab$ | async) === 'invalid-transactions' ? 1 : 0">
+                <nz-tab nzTitle="Valid Transactions {{ (tab$ | async) === 'invalid-transactions' ? '' : '(' + (transactions$ | async)?.length + ')' }}"></nz-tab>
+                <nz-tab nzTitle="Invalid Transactions {{ !((tab$ | async) === 'invalid-transactions') ? '' : '(' + (transactions$ | async)?.length + ')' }}"></nz-tab>
+            </nz-tabset>
+        </div>
+        <div class="mb-1" nz-col [nzMd]="12" [nzSm]="24">
+            <nz-input-group  class="shadow-md rounded-md" nzSize="large" [nzSuffix]="suffixIconSearch">
+                <input formControlName="filter" type="text" nz-input placeholder="Search by transaction reference or description" />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+                <i nz-icon nzType="search" nzTheme="outline"></i>
+            </ng-template>
+        </div>
+    </div>
+
+    <ul class="p-0">
+        <li class="list-none mb-4">
+            <nz-card [nzBordered]="false" class="header-card bg-white shadow-md rounded-md">
+                <div nz-row *ngIf="(tab$ | async) === 'invalid-transactions'; else validTransactionsHeader">
+                    <div nz-col [nzSpan]="24">Transaction reference</div>
+                </div>
+
+                <ng-template #validTransactionsHeader>
+                    <div nz-row>
+                        <div nz-col [nzLg]="6" [nzMd]="6" [nzSm]="12" [nzXs]="12">Transaction reference</div>
+                        <div nz-col [nzLg]="6" [nzMd]="6" [nzSm]="0" [nzXs]="0">Account number</div>
+                        <div nz-col [nzLg]="4" [nzMd]="4" [nzSm]="6" [nzXs]="6" class="text-right">Start Balance</div>
+                        <div nz-col [nzLg]="4" [nzMd]="4" [nzSm]="0" [nzXs]="0" class="text-right">Mutation</div>
+                        <div nz-col [nzLg]="4" [nzMd]="4" [nzSm]="6" [nzXs]="6" class="text-right">End Balance</div>
+                    </div>
+                </ng-template>
+            </nz-card>
+        </li>
+        <li class="list-none mb-2" *ngFor="let transaction of transactions$ | async; trackBy:trackByReference"> 
+            <nz-card [nzBordered]="false" class="bg-white shadow-md rounded-md">
+                <div nz-row *ngIf="(tab$ | async) === 'invalid-transactions'; else validTransactionRow">
+                    <div class="reference" nz-col [nzSpan]="24">{{ transaction.reference }}</div>
+                </div>
+                <ng-template #validTransactionRow>
+                    <div nz-row>
+                        <div class="reference" nz-col [nzLg]="6" [nzMd]="6" [nzSm]="12" [nzXs]="12">{{ transaction.reference }}</div>
+                        <div nz-col [nzLg]="6" [nzMd]="6" [nzSm]="0" [nzXs]="0">{{ transaction.accountNumber }}</div>
+                        <div nz-col [nzLg]="4" [nzMd]="4" [nzSm]="6" [nzXs]="6" class="text-right">
+                            {{ transaction.startBalance | number: '1.2-2' }}
+                            <div nz-col [nzMd]="0" [nzSm]="24" [nzXs]="24" class="text-right {{ (transaction.mutation && transaction.mutation[0] === '-') ? 'danger' : 'success' }}">{{ transaction.mutation | number: '1.2-2' }}</div>
+                        </div>
+                        <div nz-col [nzLg]="4" [nzMd]="4" [nzSm]="0" [nzXs]="0" class="text-right {{ (transaction.mutation && transaction.mutation[0] === '-') ? 'danger' : 'success' }}">{{ transaction.mutation | number: '1.2-2' }}</div>
+                        <div nz-col [nzLg]="4" [nzMd]="4" [nzSm]="6" [nzXs]="6" class="text-right">{{ transaction.endBalance | number: '1.2-2' }}</div>
+                    </div>
+                </ng-template>
+                <b class="description">{{ transaction.description }}</b>
+            </nz-card>
+        </li>
+        <nz-empty *ngIf="!(transactions$ | async)?.length"></nz-empty>
+    </ul>
+
+</div>
